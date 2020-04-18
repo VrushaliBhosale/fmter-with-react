@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import ReportViewer from 'react-lighthouse-viewer';
 import axios from 'axios';
 
 const ShowReports = () => {
   const url="https://cart-api-ts.herokuapp.com/scores"
-  // const url="http://localhost:3002/scores";
+  const [allRuns,setAllRuns] = useState([]);
   const [allScores,setAllScores] = useState([]);
   const [report,setReport] = useState();
-  const [selectedVal,setSelectedVal] = useState();
-  const [data,setData] = useState();
+  const [selectedIndex,setSelectedIndex] = useState();
   useEffect(()=>{
     async function getAUdits(){
       await axios.get(url)
-      .then(function(response){
-        console.log("data :",response.data.message);
-        setAllScores(response.data.message);
+      .then(async function(response){
+        const {message} = response.data;
+        console.log("data :",message);
+        await setAllRuns(message);
+        await setAllScores(message[0].urls);
+        let initialReport = message[0].urls[0].report;
+        setInitialReport(initialReport);
       })
       .catch(function(error){
           console.log("Error :",error);
@@ -23,56 +26,70 @@ const ShowReports = () => {
   getAUdits();
   },[])
 
-  useEffect(()=>{
-    const reportData = report && <ReportViewer json={report} /> ;
-    // console.log("reposrts :",reportData);
-    setData(reportData);
-  },[report])
-
-  const [count,setCount] = useState();
-  const handleClick = async(event) => {
-    setCount(event.target.value)
-
-    let {value} = event.target;
-    console.log("value :",event.target.value);
-    await setSelectedVal(value);
-    let report = value && JSON.parse(allScores[value].score);
-    setReport(report);
-  //  await allScores.map(async score=>{
-  //     if(score._id === selectedVal){
-  //      await setReport(JSON.parse(score.score));
-  //       console.log("state :",report);
-  //     }
-  //   })
+  const setInitialReport = (initialReport) => {
+    initialReport && setReport(JSON.parse(initialReport));
   }
 
-  const showReport = () => {
+  const handleRunSelect = async(event) => {
+    const {value} = event.target;
+    await setSelectedIndex(allRuns[value].urls[0]._id);
+    await setAllScores(allRuns[value].urls);
+    await allRuns[value].urls[0] && setInitialReport(allRuns[value].urls[0].report);  
+  }
+
+  const handleScoreSelect = async(event) => {
+    const {value} = event.target;
+    setSelectedIndex(value);
+    allScores.map(score=>{
+      if(score._id===value){
+        let report = JSON.parse(score.report);
+        setReport(report);
+      }
+    })
+  }
+
+  const getUniqueKey = () => {
+    return Date.now();
+  }
+
+  const runList = 
+  allRuns.map((run,index)=>{
     return (
-    <div>
-      <ReportViewer json={report} /> 
-    </div>
+    <option value={index} key={index}>{run.created_date}</option>
     )
-  }
- 
-  return (
-    <div>
-      Hiii
-      <div>
-        <input list="scores" name="score" onSelect={handleClick} />
-          <datalist id="scores">
-            {
-              allScores && allScores.map((data,index)=>{
-                return(
-                  <option value={index} key={index}/>
-                )
-              })
-            }
-          </datalist>
+  })
 
+  const scoreList = allScores.map((data,index)=>{
+    return (
+      <option value={data._id} key={index}>{data._id}</option>
+      )
+  });
+
+
+  return (
+    <div style={{backgroundColor:'#000000'}}>  
+      <div>
+        <select 
+          onChange={handleRunSelect} 
+          style={{ padding:'20px',marginLeft:'1000px',marginTop:'20px'}}
+        > 
+          {runList}
+        </select>
       </div>
-         { report && <h3>{count}</h3>}
-          {/* {report && data} */}
-      {report && <ReportViewer json={report} /> }
+      <div>
+      {
+        scoreList && 
+        <select 
+          value={selectedIndex}
+          onChange={handleScoreSelect}
+          style={{ padding:'20px',marginLeft:'1000px',marginTop:'10px'}}
+        >
+          {scoreList}
+        </select>
+      }
+      </div>
+      
+      {report && <ReportViewer json={report} key={getUniqueKey()}/> }
       
     </div>
   )
