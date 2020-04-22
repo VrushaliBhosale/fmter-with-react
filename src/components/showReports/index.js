@@ -1,21 +1,25 @@
-import React, { useEffect, useState, useReducer } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReportViewer from 'react-lighthouse-viewer';
 import axios from 'axios';
+import CompairReports from '../compairReports';
 
 const ShowReports = () => {
   const url="https://cart-api-ts.herokuapp.com/scores"
+  // const url="http://localhost:3002/scores"
   const [allRuns,setAllRuns] = useState([]);
   const [allScores,setAllScores] = useState([]);
   const [report,setReport] = useState();
-  const [selectedIndex,setSelectedIndex] = useState();
+  const [selectedIndex,setSelectedIndex] = useState();  
+  const [activeRoute,setActiveRoute] = useState(0);
   useEffect(()=>{
     async function getAUdits(){
+      console.log("hello")
       await axios.get(url)
       .then(async function(response){
         const {message} = response.data;
         console.log("data :",message);
-        await setAllRuns(message);
-        await setAllScores(message[0].urls);
+         setAllRuns(message);
+         setAllScores(message[0].urls);
         let initialReport = message[0].urls[0].report;
         setInitialReport(initialReport);
       })
@@ -44,12 +48,17 @@ const ShowReports = () => {
       if(score._id===value){
         let report = JSON.parse(score.report);
         setReport(report);
-      }
+      } 
     })
   }
 
   const getUniqueKey = () => {
     return Date.now();
+  }
+
+  const handleClick = () => {
+    console.log("CLiked .......");
+    setActiveRoute(1)
   }
 
   const runList = 
@@ -65,9 +74,11 @@ const ShowReports = () => {
       )
   });
 
-
   return (
-    <div style={{backgroundColor:'#000000'}}>  
+    <div>  
+    {
+      activeRoute === 0 &&
+    <div style={{backgroundColor:'#000000'}}>
       <div>
         <select 
           onChange={handleRunSelect} 
@@ -77,20 +88,28 @@ const ShowReports = () => {
         </select>
       </div>
       <div>
-      {
-        scoreList && 
-        <select 
-          value={selectedIndex}
-          onChange={handleScoreSelect}
-          style={{ padding:'20px',marginLeft:'1000px',marginTop:'10px'}}
-        >
-          {scoreList}
-        </select>
-      }
+        {
+          scoreList && 
+          <select 
+            value={selectedIndex}
+            onChange={handleScoreSelect}
+            style={{ padding:'20px',marginLeft:'1000px',marginTop:'10px'}}
+          >
+            {scoreList}
+          </select>
+        }
+        </div>
+         <button onClick={handleClick} style={{
+           marginLeft:'1000px',
+           marginTop:'10px'
+         }}>Compair reports</button>
+        {report && <ReportViewer json={report} key={getUniqueKey()}/> }
       </div>
-      
-      {report && <ReportViewer json={report} key={getUniqueKey()}/> }
-      
+      }
+      {
+        activeRoute === 1 && 
+        allRuns && <CompairReports runs={allRuns} />
+      }
     </div>
   )
 }
