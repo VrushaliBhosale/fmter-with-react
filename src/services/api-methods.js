@@ -1,15 +1,29 @@
 import React from 'react';
 import axios from 'axios';
-const url="https://cart-api-ts.herokuapp.com/scores";
- const getAllRuns = async() => {
-  await axios.get(url)
-      .then(async function(response){
-        const {message} = response.data;
-        console.log("data :",message);
-      })
-      .catch(function(error){
-          console.log("Error :",error);
-      });
+import {BASE_URL} from './constants';
+
+export const getAllRunIds = async() => {
+  let url = `${BASE_URL}/runs`;
+  let result = await axios.get(url)
+  .then(function(response){
+    const {runs} = response.data;
+    return runs;
+  })
+  .catch(function(error){
+      console.log("Error :",error);
+  });
+  return result;
 }
 
-export default getAllRuns
+  export const getLastReport = async(id) => {
+    let url=`${BASE_URL}/scores/${id}`;
+    let result = await axios.get(url)
+    .then(function(response){
+      return response.data.score.report;
+    })
+    .catch(function(error){
+        console.log("Error :",error);
+    });
+    return result;
+  }
+

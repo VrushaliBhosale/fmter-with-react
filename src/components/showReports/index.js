@@ -1,55 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import ReportViewer from 'react-lighthouse-viewer';
-import axios from 'axios';
 import CompairReports from '../compairReports';
-
+import {getAllRunIds, getLastReport} from '../../services/api-methods'
 const ShowReports = () => {
-  const url="https://cart-api-ts.herokuapp.com/scores"
-  // const url="http://localhost:3002/scores"
   const [allRuns,setAllRuns] = useState([]);
   const [allScores,setAllScores] = useState([]);
   const [report,setReport] = useState();
-  const [selectedIndex,setSelectedIndex] = useState();  
+  const [selectedIndex,setSelectedIndex] = useState();
+  const [initialRun,setInitialRun] = useState();  
   const [activeRoute,setActiveRoute] = useState(0);
   useEffect(()=>{
     async function getAUdits(){
       console.log("hello")
-      await axios.get(url)
-      .then(async function(response){
-        const {message} = response.data;
-        console.log("data :",message);
-         setAllRuns(message);
-         setAllScores(message[0].urls);
-        let initialReport = message[0].urls[0].report;
-        setInitialReport(initialReport);
+      await getAllRunIds()
+      .then(async runs=>{
+        await setAllRuns(runs);
+        setAllScores(runs[runs.length-1].urls);
+        setInitialRun(runs.length-1);
+        setInitialReport(runs[runs.length-1].urls[0].id);
       })
       .catch(function(error){
-          console.log("Error :",error);
+        console.log("Error :",error);
       });
     }
   getAUdits();
   },[])
 
-  const setInitialReport = (initialReport) => {
-    initialReport && setReport(JSON.parse(initialReport));
+  const setInitialReport = (id) => {
+    setReport('');
+    getLastReport(id).then(report=>{
+      setReport(JSON.parse(report));
+    })
   }
 
   const handleRunSelect = async(event) => {
     const {value} = event.target;
-    await setSelectedIndex(allRuns[value].urls[0]._id);
+    setInitialRun(value);
+    await allRuns[value].urls[0] && setInitialReport(allRuns[value].urls[0].id);  
+    await setSelectedIndex(allRuns[value].urls[0].id);
     await setAllScores(allRuns[value].urls);
-    await allRuns[value].urls[0] && setInitialReport(allRuns[value].urls[0].report);  
   }
 
   const handleScoreSelect = async(event) => {
     const {value} = event.target;
     setSelectedIndex(value);
-    allScores.map(score=>{
-      if(score._id===value){
-        let report = JSON.parse(score.report);
-        setReport(report);
-      } 
-    })
+    setInitialReport(value);
   }
 
   const getUniqueKey = () => {
@@ -70,7 +65,7 @@ const ShowReports = () => {
 
   const scoreList = allScores.map((data,index)=>{
     return (
-      <option value={data._id} key={index}>{data._id}</option>
+      <option value={data.id} key={index}>{data.url}</option>
       )
   });
 
@@ -81,6 +76,7 @@ const ShowReports = () => {
     <div style={{backgroundColor:'#000000'}}>
       <div>
         <select 
+          value={initialRun}
           onChange={handleRunSelect} 
           style={{ padding:'20px',marginLeft:'1000px',marginTop:'20px'}}
         > 
@@ -89,12 +85,11 @@ const ShowReports = () => {
       </div>
       <div>
         {
-          scoreList && 
           <select 
             value={selectedIndex}
             onChange={handleScoreSelect}
             style={{ padding:'20px',marginLeft:'1000px',marginTop:'10px'}}
-          >
+          > 
             {scoreList}
           </select>
         }

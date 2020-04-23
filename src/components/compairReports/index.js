@@ -7,7 +7,6 @@ const CompairReports = (props) => {
   const [remainingUrls,setRemainingUrls] = useState([]);
   const [msg,setMsg] = useState('Select your timestamps to show the reports');
   useEffect(()=>{
-    console.log("props :",props)
     setRuns(props.runs);
   },[props])
 
@@ -16,7 +15,6 @@ const runList = runs.map((run,index)=>{
 })
 
 const selectTimeStamp = (event,param) => {
-  console.log(event.target.value,param)
   let {value}=event.target
   console.log(runs[value])
   if(param==="run1"){
@@ -35,18 +33,16 @@ const checkRuns = () => {
       alert("please select different timestamps to compairs")
     }
   }else{
-    alert("Please selecte timestamps")
+    alert("Please selecte timestamps")  
   } 
 }
 
 const compairUrls = async (urls1,urls2,max) => {
-  console.log("hello")
   await urls1.map(url1=>{
     let data1 = JSON.parse(url1.report);
    urls2.map(async url2=>{
     
      if(url1.url===url2.url){ 
-      //  console.log("url :",url1.url)
 
        let data2 = JSON.parse(url2.report);
        console.log("per :",data1.categories.performance.score,data2.categories.performance.score);
@@ -72,7 +68,7 @@ const compairUrls = async (urls1,urls2,max) => {
        let diff = { 
         performance:run1Scores.scores.performance-run2Scores.scores.performance,
         accessibility:run1Scores.scores.accessibility-run2Scores.scores.accessibility,
-        bestPractices:run1Scores.scores.bestPractices-run1Scores.scores.bestPractices,
+        bestPractices:run1Scores.scores.bestPractices-run1Scores.scores.bestPractices,      
         seo:run1Scores.scores.seo-run1Scores.scores.seo,
         pwa:run1Scores.scores.pwa-run2Scores.scores.pwa
        }
@@ -84,7 +80,6 @@ const compairUrls = async (urls1,urls2,max) => {
          run2Scores,
          diff
        }
-       console.log(data);
        await setAudits(state=>[...state,data]);
       }
    })
@@ -99,7 +94,6 @@ useEffect(()=>{
 if(audits && audits.length>0){
   setMsg("");
   let isPresent = false;
-  console.log("hello",audits)
   timeStamps.run1.urls.map(elem=>{
     audits.map(each=>{
       if(elem.url===each.url){
@@ -130,7 +124,7 @@ if(audits && audits.length>0){
         isPresent=true;
       }
     })
-    !isPresent && console.log("dosnt present form run2",elem.url);
+    !isPresent && console.log("dosnt present form run2",elem.url) ;
     if(!isPresent){
       let parsedReport = JSON.parse(elem.report);
       let data = {
@@ -175,8 +169,6 @@ if(audits && audits.length>0){
         <button style={{ padding:'5px',marginLeft:'30px'}} onClick={checkRuns}>Submit</button>
       </div>
       <div>
-        {/* {audits && console.log("commom :",audits)}
-        {remainingUrls && console.log("diff from 1 :",remainingUrls)} */}
         {audits&&audits.length>0 &&  <ShowCommon audits={audits} />}
         {remainingUrls && remainingUrls.length>0 && <ShowCommon remaining={remainingUrls}/>}
         </div>
