@@ -8,10 +8,9 @@ const ShowReports = () => {
   const [report,setReport] = useState();
   const [selectedIndex,setSelectedIndex] = useState();
   const [initialRun,setInitialRun] = useState();  
-  const [activeRoute,setActiveRoute] = useState(0);
+  const [activeRoute,setActiveRoute] = useState(false);
   useEffect(()=>{
     async function getAUdits(){
-      console.log("hello")
       await getAllRunIds()
       .then(async runs=>{
         await setAllRuns(runs);
@@ -28,8 +27,8 @@ const ShowReports = () => {
 
   const setInitialReport = (id) => {
     setReport('');
-    getLastReport(id).then(report=>{
-      setReport(JSON.parse(report));
+    getLastReport(id).then(score=>{
+      setReport(JSON.parse(score.report));
     })
   }
 
@@ -52,8 +51,7 @@ const ShowReports = () => {
   }
 
   const handleClick = () => {
-    console.log("CLiked .......");
-    setActiveRoute(1)
+    setActiveRoute(!activeRoute)
   }
 
   const runList = 
@@ -72,7 +70,7 @@ const ShowReports = () => {
   return (
     <div>  
     {
-      activeRoute === 0 &&
+      activeRoute===false &&
     <div style={{backgroundColor:'#000000'}}>
       <div>
         <select 
@@ -102,8 +100,8 @@ const ShowReports = () => {
       </div>
       }
       {
-        activeRoute === 1 && 
-        allRuns && <CompairReports runs={allRuns} />
+        activeRoute===true && 
+        allRuns && <CompairReports runs={allRuns} changeActiveRoute={handleClick}/>
       }
     </div>
   )

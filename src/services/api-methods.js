@@ -19,11 +19,15 @@ export const getAllRunIds = async() => {
     let url=`${BASE_URL}/scores/${id}`;
     let result = await axios.get(url)
     .then(function(response){
-      return response.data.score.report;
+      return response.data.score;
     })
     .catch(function(error){
         console.log("Error :",error);
     });
     return result;
   }
+
+
+
+
 

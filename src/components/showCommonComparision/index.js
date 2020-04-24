@@ -5,7 +5,6 @@ const ShowCommon = (props) =>{
   useEffect(()=>{
     let val = (props.audits && props.audits)||(props.remaining && props.remaining);
     setData(val);
-    console.log("props :",data);
   },[props])
 
   const getScoreDifference = (score) => {
@@ -24,9 +23,9 @@ const ShowCommon = (props) =>{
       {props.audits && props.audits.length>0 && <h3>Common Urls</h3>}
     {
       // props.audits && props.audits.length>0 && 
-      data === props.audits && data.length>0 &&
+      data && data === props.audits && data.length>0 &&
         data.map(elem=>{
-          let keys=Object.keys(elem.run1Scores.scores)
+          let keys=Object.keys(elem.run1Audits)
           return (
             <div style={{
               margin:'20px'
@@ -43,7 +42,7 @@ const ShowCommon = (props) =>{
                   <div>
                     {
                       keys.map(key=>{
-                        return(<div>{key}:{elem.run1Scores.scores[key]}</div>)
+                        return(<div>{key}:{elem.run1Audits[key]}</div>)
                       })
                     }
                   </div>
@@ -54,7 +53,7 @@ const ShowCommon = (props) =>{
                   <div>
                     {
                       keys.map(key=>{
-                        return(<div>{key}:{elem.run2Scores.scores[key]}</div>)
+                        return(<div>{key}:{elem.run2Audits[key]}</div>)
                       })
                     }
                   </div>
@@ -79,7 +78,7 @@ const ShowCommon = (props) =>{
     {props.remaining && props.remaining.length>0 && <h3>Urls that haven't found any match.</h3>}
     {
       // props.remaining && props.remaining.length>0 &&
-      data===props.remaining && data.length>0 &&
+      data && data===props.remaining && data.length>0 &&
       data.map(elem=>{
         let keys=Object.keys(elem.scores)
         return(
