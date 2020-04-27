@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import ReportViewer from 'react-lighthouse-viewer';
 import CompairReports from '../compairReports';
-import {getAllRunIds, getLastReport} from '../../services/api-methods'
+import {getAllRunIds, getLastReport} from '../../services/api-methods';
+var Loader = require('react-loader');
+
 const ShowReports = () => {
   const [allRuns,setAllRuns] = useState([]);
   const [allScores,setAllScores] = useState([]);
@@ -9,7 +11,10 @@ const ShowReports = () => {
   const [selectedIndex,setSelectedIndex] = useState();
   const [initialRun,setInitialRun] = useState();  
   const [activeRoute,setActiveRoute] = useState(false);
+  const [reportlLoader,setReportLoader] = useState(true);
+  const [loader,setLoader] = useState(true);
   useEffect(()=>{
+    setLoader(false)
     async function getAUdits(){
       await getAllRunIds()
       .then(async runs=>{
@@ -17,6 +22,7 @@ const ShowReports = () => {
         setAllScores(runs[runs.length-1].urls);
         setInitialRun(runs.length-1);
         setInitialReport(runs[runs.length-1].urls[0].id);
+        setLoader(true);
       })
       .catch(function(error){
         console.log("Error :",error);
@@ -26,9 +32,10 @@ const ShowReports = () => {
   },[])
 
   const setInitialReport = (id) => {
-    setReport('');
+    setReportLoader(false)
     getLastReport(id).then(score=>{
-      setReport(JSON.parse(score.report));
+      setReport(JSON.parse(score.report)); 
+      setReportLoader(true)
     })
   }
 
@@ -70,39 +77,50 @@ const ShowReports = () => {
   return (
     <div>  
     {
-      activeRoute===false &&
-    <div style={{backgroundColor:'#000000'}}>
-      <div>
-        <select 
-          value={initialRun}
-          onChange={handleRunSelect} 
-          style={{ padding:'20px',marginLeft:'1000px',marginTop:'20px'}}
-        > 
-          {runList}
-        </select>
-      </div>
-      <div>
-        {
+      !activeRoute &&
+     <Loader loaded={loader}>
+       {
+         allRuns.length>0 && allScores.length>0 &&
+      <div style={{backgroundColor:'#000000'}}>
+        <div>
           <select 
-            value={selectedIndex}
-            onChange={handleScoreSelect}
-            style={{ padding:'20px',marginLeft:'1000px',marginTop:'10px'}}
+            value={initialRun}
+            onChange={handleRunSelect} 
+            style={{ padding:'20px',marginLeft:'1000px',marginTop:'20px'}}
           > 
-            {scoreList}
+            {runList}
           </select>
-        }
         </div>
-         <button onClick={handleClick} style={{
-           marginLeft:'1000px',
-           marginTop:'10px'
-         }}>Compair reports</button>
-        {report && <ReportViewer json={report} key={getUniqueKey()}/> }
-      </div>
-      }
+        <div>
+          {
+            <select 
+              value={selectedIndex}
+              onChange={handleScoreSelect}
+              style={{ padding:'20px',marginLeft:'1000px',marginTop:'10px'}}
+            > 
+              {scoreList}
+            </select>
+          }
+          </div>
+          <button onClick={handleClick} style={{
+            marginLeft:'1000px',
+            marginTop:'10px'
+          }}>Compair reports</button>
+           <Loader loaded={reportlLoader}>
+            {report && <ReportViewer json={report} key={getUniqueKey()}/> }
+          </Loader>
+         
+        </div> 
+        }
+        { (!allRuns.length || !allScores.length)&&<h3>Runs and scores are empty</h3>}
+        </Loader>
+      } 
+      
       {
-        activeRoute===true && 
+        activeRoute && 
         allRuns && <CompairReports runs={allRuns} changeActiveRoute={handleClick}/>
       }
+      
     </div>
   )
 }
