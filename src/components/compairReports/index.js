@@ -1,24 +1,79 @@
 import React, { useEffect,useState } from 'react';
 import ShowCommon from '../showCommonComparision';
-import { getLastReport } from '../../services/api-methods';
+import { getLastReport,getRunById } from '../../services/api-methods';
+import { Link, useLocation, useHistory, useParams, useRouteMatch} from 'react-router-dom';
 
 const CompairReports = (props) => {
-  const [runs,setRuns] = useState(props.runs);
+  const [runs,setRuns] = useState([]);
   const [timeStamps,setTimeStamps] = useState({run1:'',run2:''})
   const [audits,setAudits] = useState([]);
   const [remainingUrls,setRemainingUrls] = useState([]);
+  const history = useHistory();
   const [msg,setMsg] = useState('Select your timestamps to show the reports');
-  useEffect(()=>{
-    setRuns(props.runs);
-  },[props])
+  const [isSubmitted,setIsSubmitted] = useState(false)
+  const {path,url} = useRouteMatch();
+  let { run1,run2 } = useParams();
+  let location=useLocation();
+ 
+  const resolvePromise = async() => {
+    let abc = await getScoresFromUrlId();
+    return abc;
+  }
+  const getScoresFromUrlId = async() => {
+    let run1Data = await getRunById(run1);
+    let run2Data = await getRunById(run2);
+    if(run1Data&&run2Data){
+      return {run1Data,run2Data};
+    }
+    else{
+      setMsg("set valid timeStamps");
+      return;
+    }
+  }
 
-const runList = runs.map((run,index)=>{
+  const handleIsSubmitted = () => {
+    setIsSubmitted(!isSubmitted)
+  }
+
+  useEffect(()=>{
+    if(run1 && run2){
+      if(run1!==run2){  
+      resolvePromise().then(res=>{
+      if(res){
+        setTimeStamps({run1:{...res.run1Data},run2:{...res.run2Data}});
+      }else{setMsg("set Valid TimeStamps")}
+        });
+        }else{
+          setMsg("please select different timestamps to compare");
+          setAudits([]);
+          setRemainingUrls([]);
+        }
+      }
+  },[run1,run2])
+
+  useEffect(()=>{
+    if(timeStamps.run1&&timeStamps.run2&&run1&&run2&&isSubmitted){
+      if(timeStamps.run1!==timeStamps.run2){
+        checkRuns();
+      }else{
+        setMsg("please select different timestamps to compare");
+      }
+    }
+  },[timeStamps,isSubmitted])
+
+  useEffect(()=>{
+    if(location.state){
+      location.state.runs.allRuns ? setRuns(location.state.runs.allRuns) :
+      location.state.runs && setRuns(location.state.runs)
+    }
+  },[])
+
+const runList = runs && runs.map((run,index)=>{
   return <option key={index} value={index}>{run.created_date}</option>
 })
 
 const selectTimeStamp = (event,param) => {
   let {value}=event.target
-  console.log("time :",new Date(value).getTime());
   if(param==="run1"){
     setTimeStamps({...timeStamps,run1:runs[value]});
   }else{
@@ -29,16 +84,17 @@ const selectTimeStamp = (event,param) => {
 const checkRuns = () => {
   setAudits([]);
   setRemainingUrls([]);
-  setMsg("loading ..")
+  setMsg("loading ..");
+  handleIsSubmitted();
   if(timeStamps.run1 && timeStamps.run2){
     const {run1,run2} = timeStamps;
     if(run1 !== run2 ){
       compairUrls(run1.urls,run2.urls);
     }else{
-      alert("please select different timestamps to compairs")
+      setMsg("please select different timestamps to compare");
     }
   }else{
-    alert("Please selecte timestamps")  
+    setMsg("Please select timestamps")  
   } 
 }
 
@@ -51,21 +107,18 @@ let common=[];
       }
    })
  })
- console.log("common :",common)
  if(common.length>0){ 
-   let data = await getCommonAudits(common);
-    console.log("data :",data)
+  let data = await getCommonAudits(common)
    setAudits(data); 
   }
-if(!common.length){
-  setMsg("no  common results ")
-  }
+if(!common.length){setMsg("no  common results ")}
+  getRemainingScore(common);
 }
 
 const getCommonAudits = (common) => {
   const data = Promise.all(
     common.map(async (element) => {
-      let run1Audits,run2Audits,diff={},str='';
+      let run1Audits,run2Audits,diff={};
       await getLastReport(element.id1).then(result=>run1Audits=result.audits);
       await getLastReport(element.id2).then(result=>run2Audits=result.audits);
       let keys = Object.keys(run1Audits);
@@ -81,8 +134,7 @@ const getCommonAudits = (common) => {
   return data;
 }
 
-useEffect(()=>{
-  const getRemainingScore = async() =>{
+const getRemainingScore = async(audits) =>{
   let remaining=[];
   if(audits && audits.length>0){
   let isPresent = false;
@@ -118,8 +170,6 @@ useEffect(()=>{
       setRemainingUrls(data);
      }
   }
-  getRemainingScore();
-},[audits])
 
 function getCalculatedAudits(remaining) {
   const data = Promise.all(
@@ -134,26 +184,31 @@ function getCalculatedAudits(remaining) {
 
   return (
     <div style={{marginLeft:'30px'}}>
-      <button onClick={props.changeActiveRoute}>Back</button>
+      <Link to='/'>
+      <button>Back to Home</button>
+      </Link>
       <div>
-      <div>
+      {runs.length>0 && <div>
         <select 
           onChange={(event)=>selectTimeStamp(event,"run1")} 
-          style={{marginTop:'20px'}}
-        > 
+          style={{marginTop:'20px'}}> 
          <option>Select one</option>
           {runList}
         </select>
         <select   
           onChange={(event)=>selectTimeStamp(event,"run2")} 
-          style={{ marginLeft:'10px',marginTop:'20px'}}     
-        > 
+          style={{ marginLeft:'10px',marginTop:'20px'}}> 
          <option>Select one</option>
           {runList}
         </select>
-        <button style={{ padding:'5px',marginLeft:'30px'}} onClick={checkRuns}>Submit</button>
+        <Link to={{
+          pathname:`/compare/${timeStamps.run1._id}/${timeStamps.run2._id}`,
+          state:{runs:runs}}}>     
+           <button style={{ padding:'5px',marginLeft:'30px'}} onClick={handleIsSubmitted}>Submit</button>
+         </Link>
       </div>
-
+      }
+      {run1&&run2&&!runs.length&&<button onClick={handleIsSubmitted}>run</button>}
       {
         (audits && audits.length>0) || (remainingUrls&&remainingUrls.length>0) ?
       <div>
@@ -161,10 +216,12 @@ function getCalculatedAudits(remaining) {
         {remainingUrls && remainingUrls.length>0 && <ShowCommon remaining={remainingUrls}/>}
       </div>
       : <h3>{msg}</h3>
-      }
+      } 
+      
     </div>
   </div>
   )
+
 }
 
 export default CompairReports

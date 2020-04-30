@@ -1,0 +1,30 @@
+.report-inputs-wrapper{
+  display: flex;
+    flex-direction: column;
+    width: 40%;
+    align-items: flex-start;
+    margin-left: 65%;
+    padding: 10px;
+}
+
+.report-imput-elem-spacing{
+  margin-bottom:1%;
+}
+
+/* tablet, landscape iPad, lo-res laptops ands desktops for all below 1129px screen sizes */
+@media (max-width:1281px)  { 
+  .report-inputs-viewer{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    align-items: flex-start;
+    margin-left: 45%;
+    padding: 10px;
+  }
+}
+
+
+
+
+
+

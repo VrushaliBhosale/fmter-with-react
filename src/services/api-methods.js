@@ -1,4 +1,3 @@
-import React from 'react';
 import axios from 'axios';
 import {BASE_URL} from './constants';
 
@@ -27,6 +26,17 @@ export const getAllRunIds = async() => {
     return result;
   }
 
+  export const getRunById = async(id) => {
+    let url=`${BASE_URL}/runs/${id}`;
+    let result = await axios.get(url)
+    .then(function(response){
+      return response.data.data;
+    })
+    .catch(function(error){
+        console.log("Error :",error);
+    });
+    return result;
+  }
 
 
 
