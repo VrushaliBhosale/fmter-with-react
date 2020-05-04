@@ -37,7 +37,6 @@ const ShowReports = () => {
     let isSubscribed = true;
     if (isSubscribed) {
       reslovePromies().then(runs=>{
-        console.log("runs :",runs)
         if(runs){
         setAllRuns(runs);
         setAllScores(runs[runs.length-1].urls);
@@ -55,8 +54,11 @@ const ShowReports = () => {
   const setInitialReport = (id) => {
     setReportLoader(false)
     getLastReport(id).then(score=>{
-      setReport(JSON.parse(score.report)); 
+      try{
+      let data = JSON.parse(score.report);
+      setReport(data); 
       setReportLoader(true)
+      }catch(err){console.log("error in parsing the json report :",err)}
     })
   }
 
