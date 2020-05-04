@@ -105,16 +105,14 @@ const ShowReports = () => {
           <div className="report-imput-elem-spacing">
             <select 
               value={initialRun}
-              onChange={handleRunSelect} 
-            > 
+              onChange={handleRunSelect} > 
               {runList}
             </select>
           </div>
           <div className="report-imput-elem-spacing">
             <select 
               value={selectedIndex}
-              onChange={handleScoreSelect}
-            > 
+              onChange={handleScoreSelect}> 
               {scoreList}
             </select>
             </div>
