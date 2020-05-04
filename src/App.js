@@ -6,20 +6,8 @@ import ReportProvider from './services/reports-context'
 import CompairReports from './components/compairReports'
 
 function App() {
-  
+  console.log("env base url :",process.env.REACT_APP_BASE_URL)
   return (
-    // <Router>
-    //   <Switch>
-    //       <div>
-    //       <Route exact path="/"
-    //         render={props => ( <ShowReports/>)}
-    //       />
-    //       {/* <Route path="/compair"
-    //         render={props => ( <CompairReports/>)}
-    //       /> */}
-    //      </div>
-    //   </Switch>
-    // </Router>
     <ReportProvider>
       <Router>
         <Route exact path='/' children={<ShowReports/>}/>

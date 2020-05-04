@@ -1,6 +1,5 @@
 import axios from 'axios';
-import {BASE_URL} from './constants';
-
+const BASE_URL = process.env.REACT_APP_BASE_URL
 export const getAllRunIds = async() => {
   let url = `${BASE_URL}/runs`;
   let result = await axios.get(url)

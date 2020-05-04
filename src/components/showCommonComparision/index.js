@@ -20,7 +20,7 @@ const ShowCommon = (props) =>{
   }
   return (
     <div>
-      {props.audits && props.audits.length>0 && <h3>Common Urls</h3>||null}
+      {props.audits && props.audits.length>0 && <h3>Common Urls</h3>}
     {
       // props.audits && props.audits.length>0 && 
       data && data === props.audits && data.length>0 &&
@@ -75,7 +75,7 @@ const ShowCommon = (props) =>{
           )
         })
     }
-    {props.remaining && props.remaining.length>0 && <h3>Urls that haven't found any match.</h3>||null}
+    {props.remaining && props.remaining.length>0 && <h3>Urls that haven't found any match.</h3>}
     {
       // props.remaining && props.remaining.length>0 &&
       data && data===props.remaining && data.length>0 &&
