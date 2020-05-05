@@ -101,18 +101,23 @@ const ShowReports = () => {
        {
          allRuns.length>0 && allScores.length>0 &&
       <div style={{backgroundColor:'#000000'}}>
-        <div className="report-inputs-wrapper">
+        <div className="report-inputs-viewer">
           <div className="report-imput-elem-spacing">
             <select 
               value={initialRun}
-              onChange={handleRunSelect} > 
+              onChange={handleRunSelect} 
+              style={{ textOverflow: "ellipsis",overflow: "hidden"}}
+              > 
               {runList}
+              
             </select>
           </div>
           <div className="report-imput-elem-spacing">
             <select 
               value={selectedIndex}
-              onChange={handleScoreSelect}> 
+              onChange={handleScoreSelect}
+              style={{ textOverflow: "ellipsis",overflow: "hidden"}}
+              > 
               {scoreList}
             </select>
             </div>

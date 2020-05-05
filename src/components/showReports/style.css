@@ -3,25 +3,134 @@
     flex-direction: column;
     width: 40%;
     align-items: flex-start;
-    margin-left: 65%;
-    padding: 10px;
-}
-
-.report-imput-elem-spacing{
+    margin-left: 45%;
+    /* padding: 10px; */
+}   
+/* .report-imput-elem-spacing{
   margin-bottom:1%;
-}
+} */
 
 /* tablet, landscape iPad, lo-res laptops ands desktops for all below 1129px screen sizes */
-@media (max-width:1281px)  { 
+@media (min-width:1281px)  { 
   .report-inputs-viewer{
     display: flex;
     flex-direction: column;
-    width: 40%;
+    width: 30%;
     align-items: flex-start;
-    margin-left: 45%;
+    margin-left: 65%;
     padding: 10px;
   }
 }
+
+@media (min-width:736px)  { 
+  .report-inputs-viewer{
+    display: flex;
+    flex-direction: column;
+    width: 35%;
+    align-items: flex-start;
+    margin-left: 60%;
+    padding: 10px;
+  }
+}
+
+
+/* 
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+
+@media (min-width: 1281px) {
+  .report-inputs-wrapper{
+    display: flex;
+      flex-direction: column;
+      width: 30%;
+      align-items: flex-start;
+      margin-left: 65%;
+      /* padding: 10px; */
+  }   
+}
+
+/* 
+  ##Device = Laptops, Desktops
+  ##Screen = B/w 1025px to 1280px
+*/
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .report-inputs-wrapper{
+    display: flex;
+      flex-direction: column;
+      width: 35%;
+      align-items: flex-start;
+      margin-left: 60%;
+      /* padding: 10px;   */
+  }  
+}
+
+/* 
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+
+/* @media (min-width: 768px) and (max-width: 1024px) {
+  .report-inputs-wrapper{
+    display: flex;
+      flex-direction: column;
+      width: 40%;
+      align-items: flex-start;
+      margin-left: 50%;
+      padding: 10px;
+  }  
+} */
+
+/* 
+  ##Device = Tablets, Ipads (landscape)
+  ##Screen = B/w 768px to 1024px
+*/
+/* 
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  .report-inputs-wrapper{
+    display: flex;
+      flex-direction: column;
+      width: 40%;
+      align-items: flex-start;
+      margin-left: 45%;
+      padding: 10px;
+  }  
+} */
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+/* 
+@media (min-width: 481px) and (max-width: 767px) {
+  .report-inputs-wrapper{
+    display: flex;
+      flex-direction: column;
+      width: 40%;
+      align-items: flex-start;
+      margin-left: 30%;
+      padding: 10px;
+  }  
+} */
+
+/* 
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+/* @media (min-width: 320px) and (max-width: 480px) {
+  .report-inputs-wrapper{
+    display: flex;
+      flex-direction: column;
+      width: 40%;
+      align-items: flex-start;
+      margin-left: 10%;
+      padding: 10px;
+  }  
+} */
+
+
 
 
 

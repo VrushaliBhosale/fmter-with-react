@@ -57,8 +57,16 @@ const CompairReports = (props) => {
 
   useEffect(()=>{
     if(location.state){
-      location.state.runs.allRuns ? setRuns(location.state.runs.allRuns) :
-      location.state.runs && setRuns(location.state.runs) 
+      const {runs} = location.state;
+      // location.state.runs.allRuns ? setRuns(location.state.runs.allRuns) :
+      // location.state.runs && setRuns(location.state.runs) 
+      if(runs.allRuns){
+        setRuns(runs.allRuns);
+        setRunId1(runs.allRuns[0]._id);setRunId2(runs.allRuns[0]._id);
+      }else if(runs){
+        setRuns(runs);
+        setRunId1(runs[0]._id);setRunId2(runs[0]._id);
+      }
     }
   },[])
 
@@ -165,8 +173,9 @@ function getCalculatedAudits(remaining) {
   );
   return data;
 }
+
   return (
-    <div style={{marginLeft:'30px'}}>
+    <div style={{marginLeft:'30px',backgroundColor:'#00000'}}>
       <Link to='/'>
       <button>Back to Home</button>
       </Link>
@@ -174,12 +183,14 @@ function getCalculatedAudits(remaining) {
       {runs.length>0 && <div>
         <select 
           onChange={(event)=>setRunId1(event.target.value)} 
+          value={runId1}
           style={{marginTop:'20px'}}> 
          <option>Select one</option>
           {runList}
         </select>
         <select   
           onChange={(event)=>setRunId2(event.target.value)} 
+          value={runId2}
           style={{ marginLeft:'10px',marginTop:'20px'}}> 
          <option>Select one</option>
           {runList}
@@ -188,7 +199,7 @@ function getCalculatedAudits(remaining) {
            pathname:`/compare/${runId1}/${runId2}`,
            state:{runs:runs}
         }}>
-          <button style={{ padding:'5px',marginLeft:'30px'}} >Submit</button>
+          <button style={{ padding:'5px',marginLeft:'30px'}}>Submit</button>
           </Link>
       </div>
       }

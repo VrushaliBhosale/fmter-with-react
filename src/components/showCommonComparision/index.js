@@ -10,7 +10,7 @@ const ShowCommon = (props) =>{
   },[props])
 
   return (
-    <div>
+    <>
       {props.audits && props.audits.length>0 && <h3>Common Urls</h3>}
       {
         data && data === props.audits && data.length>0 &&
@@ -25,7 +25,7 @@ const ShowCommon = (props) =>{
           return <RemainingUrlsTable data={elem} key={index}/>
         })
       }
-    </div>
+    </>
   )
 }
 export default ShowCommon

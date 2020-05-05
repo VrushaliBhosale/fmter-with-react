@@ -6,6 +6,11 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const RemainingUrlsTable = (props) => {
   const [comparedData,setComparedData] = useState({});
@@ -17,6 +22,11 @@ const RemainingUrlsTable = (props) => {
     }
   },[props])
 
+  const [expanded, setExpanded] = React.useState(false);
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
   function createData(name, description) {
     return { name, description};
   }
@@ -27,28 +37,40 @@ const RemainingUrlsTable = (props) => {
 
   return (
     <div>
-    <div style={{fontWeight:'bold'}}>{comparedData.url}</div>
-
-    <TableContainer component={Paper} style={{margin:'10px',width:'70%'}}>
-    <Table>
-      <TableHead>
-          <TableRow>
-            <TableCell align="left">Title</TableCell>
-            <TableCell align="left">Description</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row" align="left">
-                {row.name}
-              </TableCell>
-              <TableCell align="left">{row.description}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+      <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')} style={{margin:'10px'}}>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
+        >
+          <Typography>url : </Typography>
+          <Typography>{comparedData.url}</Typography>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails style={{backgroundColor:'#F5F5F5'}}>
+          <Typography style={{display:'flex',flexDirection:'row',margin:'10px',alignItems:'space-around',width:'100%'}}>
+            <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                  <TableRow>
+                    <TableCell align="left">Title</TableCell>
+                    <TableCell align="left">Description</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.map((row) => (
+                    <TableRow key={row.name}>
+                      <TableCell component="th" scope="row" align="left">
+                        {row.name}
+                      </TableCell>
+                      <TableCell align="left">{row.description}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Typography>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     </div>
   )
 }
