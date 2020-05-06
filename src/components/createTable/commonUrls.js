@@ -64,9 +64,9 @@ const CommonUrlsTable = (props) => {
                 <TableCell colSpan={3} style={{fontWeight:'bold'}} align='center'>URL comparision</TableCell>
               </TableRow> 
               <TableRow>
-                <TableCell align="left">Title</TableCell>
-                <TableCell align="left">{comparedData.timeStamp1}</TableCell>
-                <TableCell align="left">{comparedData.timeStamp2}</TableCell>
+                <TableCell align="left" style={{fontWeight:'bold'}} >Title</TableCell>
+                <TableCell align="left" style={{fontWeight:'bold'}} >{comparedData.timeStamp1}</TableCell>
+                <TableCell align="left" style={{fontWeight:'bold'}} >{comparedData.timeStamp2}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -75,8 +75,8 @@ const CommonUrlsTable = (props) => {
                   <TableCell component="th" scope="row" align="left" className='bold-fonts'>
                     {row.name}
                   </TableCell>
-                  <TableCell align="center">{row.run1score}</TableCell>
-                  <TableCell align="center">{row.run2score}</TableCell>
+                  <TableCell align="left">{row.run1score}</TableCell>
+                  <TableCell align="left">{row.run2score}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -90,8 +90,8 @@ const CommonUrlsTable = (props) => {
                <TableCell colSpan={3} style={{fontWeight:'bold'}} align='center'>Summary</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell align="left">Title</TableCell>
-              <TableCell align="left">Description</TableCell>
+              <TableCell align="left" style={{fontWeight:'bold'}} >Title</TableCell>
+              <TableCell align="left" style={{fontWeight:'bold'}} >Description</TableCell>
             </TableRow>
           </TableHead>
             <TableBody>

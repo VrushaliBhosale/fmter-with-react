@@ -42,8 +42,8 @@ const RemainingUrlsTable = (props) => {
           <Table>
             <TableHead>
                 <TableRow>
-                  <TableCell align="left">Title</TableCell>
-                  <TableCell align="left">Description</TableCell>
+                  <TableCell align="left" style={{fontWeight:'bold'}} >Title</TableCell>
+                  <TableCell align="left" style={{fontWeight:'bold'}} >Description</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
