@@ -9,14 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import {Collapse} from 'react-collapse';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
-
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import './style.css'
 
 const CommonUrlsTable = (props) => {
@@ -41,11 +34,6 @@ const CommonUrlsTable = (props) => {
     return msg;
   }
 
-  const [expanded, setExpanded] = React.useState(false);
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
-
   function createCompairData(name, run1score, run2score) {
     return { name, run1score, run2score };
   }
@@ -62,73 +50,8 @@ const CommonUrlsTable = (props) => {
     return createSummaryData(key,comparedData.diff[key])
   })
 
-  const handleClick = () => {console.log(open);setOpen(!open)}
+  const handleClick = () => {setOpen(!open)}
   return (
-    // <div>
-    //   <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')} style={{margin:'10px'}}>
-    //     <ExpansionPanelSummary
-    //       expandIcon={<ExpandMoreIcon />}
-    //       aria-controls="panel1bh-content"
-    //       id="panel1bh-header"
-    //     >
-    //       <Typography>url :</Typography>
-    //       <Typography>{comparedData.url}</Typography>
-    //     </ExpansionPanelSummary>
-    //     <ExpansionPanelDetails style={{backgroundColor:'#F5F5F5'}}>
-    //       <Typography style={{display:'flex',flexDirection:'row',margin:'10px',alignItems:'space-around',width:'100%'}}>
-    //         <TableContainer component={Paper} style={{margin:'10px'}}>
-    //           <Table>
-    //             <TableHead>
-    //               {/* <TableRow style={{fontWeight:'bold',alignSelf:'center'}}>
-    //                 <TableCell>URL comparision</TableCell>
-    //               </TableRow>  */}
-    //               <TableRow>
-    //                 <TableCell align="left" className="bold-fonts">Title</TableCell>
-    //                 <TableCell align="left" className='bold-fonts'>{comparedData.timeStamp1}</TableCell>
-    //                 <TableCell align="left" className='bold-fonts'>{comparedData.timeStamp2}</TableCell>
-    //               </TableRow>
-    //             </TableHead>
-    //             <TableBody>
-    //               {comparisionRows.map((row) => (
-    //                 <TableRow key={row.name}>
-    //                   <TableCell component="th" scope="row" align="left" className='bold-fonts'>
-    //                     {row.name}
-    //                   </TableCell>
-    //                   <TableCell align="center">{row.run1score}</TableCell>
-    //                   <TableCell align="center">{row.run2score}</TableCell>
-    //                 </TableRow>
-    //               ))}
-    //             </TableBody>
-    //           </Table>
-    //         </TableContainer>
-
-    //         <TableContainer component={Paper} style={{margin:'10px',width:'70%'}}>
-    //         <Table>
-    //           <TableHead>
-    //             {/* <TableRow style={{fontWeight:'bold'}}>
-    //               <TableCell>Summary</TableCell>
-    //             </TableRow> */}
-    //             <TableRow>
-    //               <TableCell align="left">Title</TableCell>
-    //               <TableCell align="left">Description</TableCell>
-    //             </TableRow>
-    //           </TableHead>
-    //            <TableBody>
-    //               {summaryRows.map((row,index) => (
-    //                 <TableRow key={index}>
-    //                   <TableCell component="th" scope="row" align="left">
-    //                     {row.name}
-    //                   </TableCell>
-    //                   <TableCell align="left">{getScoreDifference(row.description)}</TableCell>
-    //                 </TableRow>
-    //               ))}
-    //             </TableBody>
-    //           </Table>
-    //         </TableContainer>
-    //       </Typography>
-    //     </ExpansionPanelDetails>
-    //   </ExpansionPanel>    
-    // </div>
     <div>
       <Card style={{margin:'10px'}}>
       <CardActions onClick={handleClick} style={{padding:'15px'}}>{comparedData.url}</CardActions>
@@ -141,9 +64,9 @@ const CommonUrlsTable = (props) => {
                 <TableCell colSpan={3} style={{fontWeight:'bold'}} align='center'>URL comparision</TableCell>
               </TableRow> 
               <TableRow>
-                <TableCell align="left" className="bold-fonts">Title</TableCell>
-                <TableCell align="left" className='bold-fonts'>{comparedData.timeStamp1}</TableCell>
-                <TableCell align="left" className='bold-fonts'>{comparedData.timeStamp2}</TableCell>
+                <TableCell align="left">Title</TableCell>
+                <TableCell align="left">{comparedData.timeStamp1}</TableCell>
+                <TableCell align="left">{comparedData.timeStamp2}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

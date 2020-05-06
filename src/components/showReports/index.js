@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReportViewer from 'react-lighthouse-viewer';
 import {getAllRunIds, getLastReport} from '../../services/api-methods';
-import {ReportContext} from '../../services/reports-context'
 import './style.css';
 import { Link } from 'react-router-dom';
 var Loader = require('react-loader');
@@ -14,9 +13,6 @@ const ShowReports = () => {
   const [initialRun,setInitialRun] = useState();  
   const [reportlLoader,setReportLoader] = useState(true);
   const [loader,setLoader] = useState(true);
-
-  const context = useContext(ReportContext);
-  // const {data} = context.state;
 
   const reslovePromies = async() =>{
     let data = await getAUdits();
@@ -32,7 +28,6 @@ const ShowReports = () => {
     });
   }
   useEffect(()=>{
-    // context.dispatch({ type: 'addRuns' });
     setLoader(false);
     let isSubscribed = true;
     if (isSubscribed) {
@@ -84,7 +79,7 @@ const ShowReports = () => {
     return (
     <option value={index} key={index}>{run.created_date}</option>
     )
-  })||null
+  })
 
   const scoreList = allScores.map((data,index)=>{
     return (

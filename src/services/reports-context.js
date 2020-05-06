@@ -12,7 +12,7 @@ const initialState = {
 
 const cartReducer = (state, action) => {
   switch (action.type) {
-    case "addRuns": console.log("add runs reducers");
+    case "addRuns": console.log("add runs reducers");break
     default:
       return state;
   }

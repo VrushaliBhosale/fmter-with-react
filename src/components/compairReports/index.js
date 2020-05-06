@@ -2,7 +2,6 @@ import React, { useEffect,useState } from 'react';
 import ShowCommon from '../showCommonComparision';
 import { getLastReport,getRunById } from '../../services/api-methods';
 import { Link, useLocation, useParams} from 'react-router-dom';
-import { getCommonUrls, getRemainingurls } from '../../services/compair-reports';
 
 const CompairReports = (props) => {
   const [runs,setRuns] = useState([]);
@@ -57,9 +56,7 @@ const CompairReports = (props) => {
 
   useEffect(()=>{
     if(location.state){
-      const {runs} = location.state;
-      // location.state.runs.allRuns ? setRuns(location.state.runs.allRuns) :
-      // location.state.runs && setRuns(location.state.runs) 
+      const {runs} = location.state; 
       if(runs.allRuns){
         setRuns(runs.allRuns);
         setRunId1(runs.allRuns[0]._id);setRunId2(runs.allRuns[0]._id);
