@@ -10,8 +10,34 @@ import {Collapse} from 'react-collapse';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = {
+  boldFonts: {
+   fontWeight:'bold'
+  },
+  cardContents: {
+    display:'flex',
+    flexDirection:'row',
+    padding:'15px',
+    alignItems:'space-around',
+    width:'98%',
+    backgroundColor:'#F5F5F5'
+  },
+  comapiredTableContainer:{
+    margin:'10px'
+  },
+  summaryTableContainer:{
+    margin:'10px',
+    width:'70%'
+  },
+  cardActions:{
+    padding:'15px'
+  }
+};
 
 const RemainingUrlsTable = (props) => {
+  const { classes } = props;
   const [comparedData,setComparedData] = useState({});
   const [keys,setKeys] = useState([]);
   const [open,setOpen] = useState(false);
@@ -34,16 +60,16 @@ const RemainingUrlsTable = (props) => {
 
   return (
     <div>
-      <Card style={{margin:'10px'}}>
-        <CardActions onClick={handleClick} style={{padding:'15px'}}>{comparedData.url}</CardActions>
+      <Card className={classes.comapiredTableContainer}>
+        <CardActions onClick={handleClick} className={classes.cardActions}>{comparedData.url}</CardActions>
         <Collapse isOpened={open}>
-        <CardContent style={{display:'flex',flexDirection:'row',padding:'15px',alignItems:'space-around',width:'98%',backgroundColor:'#F5F5F5'}}>
+        <CardContent className={classes.cardContents}>
         <TableContainer component={Paper} style={{margin:'10px'}}>
           <Table>
             <TableHead>
                 <TableRow>
-                  <TableCell align="left" style={{fontWeight:'bold'}} >Title</TableCell>
-                  <TableCell align="left" style={{fontWeight:'bold'}} >Description</TableCell>
+                  <TableCell align="left" className={classes.boldFonts}>Title</TableCell>
+                  <TableCell align="left" className={classes.boldFonts}>Description</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -65,5 +91,6 @@ const RemainingUrlsTable = (props) => {
   )
 }
 
-export default RemainingUrlsTable;
+export default withStyles(styles)(RemainingUrlsTable);
+
 

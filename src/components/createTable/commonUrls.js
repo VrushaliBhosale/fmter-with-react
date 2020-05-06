@@ -10,9 +10,34 @@ import {Collapse} from 'react-collapse';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import './style.css'
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = {
+  boldFonts: {
+   fontWeight:'bold'
+  },
+  cardContents: {
+    display:'flex',
+    flexDirection:'row',
+    padding:'15px',
+    alignItems:'space-around',
+    width:'98%',
+    backgroundColor:'#F5F5F5'
+  },
+  comapiredTableContainer:{
+    margin:'10px'
+  },
+  summaryTableContainer:{
+    margin:'10px',
+    width:'70%'
+  },
+  cardActions:{
+    padding:'15px'
+  }
+};
 
 const CommonUrlsTable = (props) => {
+  const { classes } = props;
   const [comparedData,setComparedData] = useState({});
   const [keys,setKeys] = useState([]);
   const [open,setOpen] = useState(false);
@@ -53,20 +78,20 @@ const CommonUrlsTable = (props) => {
   const handleClick = () => {setOpen(!open)}
   return (
     <div>
-      <Card style={{margin:'10px'}}>
-      <CardActions onClick={handleClick} style={{padding:'15px'}}>{comparedData.url}</CardActions>
+      <Card className={classes.comapiredTableContainer}>
+      <CardActions onClick={handleClick} className={classes.cardActions}>{comparedData.url}</CardActions>
       <Collapse isOpened={open}>
-        <CardContent style={{display:'flex',flexDirection:'row',padding:'15px',alignItems:'space-around',width:'98%',backgroundColor:'#F5F5F5'}}>
-        <TableContainer component={Paper} style={{margin:'10px'}}>
+        <CardContent className={classes.cardContents}>
+        <TableContainer component={Paper} className={classes.comapiredTableContainer}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell colSpan={3} style={{fontWeight:'bold'}} align='center'>URL comparision</TableCell>
+                <TableCell colSpan={3} className={classes.boldFonts} align='center'>URL comparision</TableCell>
               </TableRow> 
               <TableRow>
-                <TableCell align="left" style={{fontWeight:'bold'}} >Title</TableCell>
-                <TableCell align="left" style={{fontWeight:'bold'}} >{comparedData.timeStamp1}</TableCell>
-                <TableCell align="left" style={{fontWeight:'bold'}} >{comparedData.timeStamp2}</TableCell>
+                <TableCell align="left" className={classes.boldFonts}>Title</TableCell>
+                <TableCell align="left" className={classes.boldFonts}>{comparedData.timeStamp1}</TableCell>
+                <TableCell align="left" className={classes.boldFonts}>{comparedData.timeStamp2}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -83,15 +108,15 @@ const CommonUrlsTable = (props) => {
           </Table>
         </TableContainer>
 
-        <TableContainer component={Paper} style={{margin:'10px',width:'70%'}}>
+        <TableContainer component={Paper} className={classes.summaryTableContainer}>
         <Table>
           <TableHead>
-            <TableRow style={{fontWeight:'bold'}}>
-               <TableCell colSpan={3} style={{fontWeight:'bold'}} align='center'>Summary</TableCell>
+            <TableRow className={classes.boldFonts}>
+               <TableCell colSpan={3} className={classes.boldFonts} align='center'>Summary</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell align="left" style={{fontWeight:'bold'}} >Title</TableCell>
-              <TableCell align="left" style={{fontWeight:'bold'}} >Description</TableCell>
+              <TableCell align="left" className={classes.boldFonts}>Title</TableCell>
+              <TableCell align="left" className={classes.boldFonts}>Description</TableCell>
             </TableRow>
           </TableHead>
             <TableBody>
@@ -113,4 +138,5 @@ const CommonUrlsTable = (props) => {
   )
 }
 
-export default CommonUrlsTable;
+export default withStyles(styles)(CommonUrlsTable);
+
