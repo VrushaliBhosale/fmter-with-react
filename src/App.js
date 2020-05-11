@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
-import ShowReports from './components/showReports'
+import ShowReports from './components/reports'
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import ReportProvider from './services/reports-context'
-import CompairReports from './components/compairReports'
+import CompairReports from './components/reportComparison/index'
 
 function App() {
   return (

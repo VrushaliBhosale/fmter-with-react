@@ -5,6 +5,7 @@ export const getAllRunIds = async() => {
   let result = await axios.get(url)
   .then(function(response){
     const {runs} = response.data;
+    console.log(runs);
     return runs;
   })
   .catch(function(error){
@@ -30,6 +31,18 @@ export const getAllRunIds = async() => {
     let result = await axios.get(url)
     .then(function(response){
       return response.data.data;
+    })
+    .catch(function(error){
+        console.log("Error :",error);
+    });
+    return result;
+  }
+
+  export const getAllProjects = async() => {
+    let url=`${BASE_URL}/projects`;
+    let result = await axios.get(url)
+    .then(function(response){
+      return response.data.projects;
     })
     .catch(function(error){
         console.log("Error :",error);

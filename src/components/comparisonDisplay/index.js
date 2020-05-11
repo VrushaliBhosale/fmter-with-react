@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import CommonUrlsTable from '../createTable/commonUrls';
-import RemainingUrlsTable from '../createTable/remainingUrls';
+import CommonUrlsTable from '../tables/commonUrls';
+import RemainingUrlsTable from '../tables/remainingUrls';
 
 const ShowCommon = (props) =>{
   const [data,setData] = useState([]);

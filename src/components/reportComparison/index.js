@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from 'react';
-import ShowCommon from '../showCommonComparision';
+import ShowCommon from '../comparisonDisplay';
 import { getLastReport,getRunById } from '../../services/api-methods';
 import { Link, useLocation, useParams} from 'react-router-dom';
 
