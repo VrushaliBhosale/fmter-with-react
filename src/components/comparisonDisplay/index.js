@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CommonUrlsTable from '../tables/commonUrls';
 import RemainingUrlsTable from '../tables/remainingUrls';
+import {memo} from 'react';
 
 const ShowCommon = (props) =>{
   const [data,setData] = useState([]);
@@ -28,4 +29,4 @@ const ShowCommon = (props) =>{
     </>
   )
 }
-export default ShowCommon
+export default memo(ShowCommon);

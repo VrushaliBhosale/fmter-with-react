@@ -11,6 +11,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import { withStyles } from '@material-ui/core/styles';
+const moment = require('moment');
 
 const styles = {
   boldFonts: {
@@ -90,8 +91,8 @@ const CommonUrlsTable = (props) => {
               </TableRow> 
               <TableRow>
                 <TableCell align="left" className={classes.boldFonts}>Title</TableCell>
-                <TableCell align="left" className={classes.boldFonts}>{comparedData.timeStamp1}</TableCell>
-                <TableCell align="left" className={classes.boldFonts}>{comparedData.timeStamp2}</TableCell>
+                <TableCell align="left" className={classes.boldFonts}>{moment(comparedData.timeStamp1).format('DD/MMM/YYYY,h:mm:ss a')}</TableCell>
+                <TableCell align="left" className={classes.boldFonts}>{moment(comparedData.timeStamp2).format('DD/MMM/YYYY,h:mm:ss a')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

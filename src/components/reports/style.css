@@ -1,0 +1,73 @@
+
+.name-input-wrapper{
+  /* display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: space-between;
+  padding: 10px; */
+  align-items: center;
+  align-content: center;
+  justify-content: space-between;
+  padding: 10px;
+  text-align: center;
+}
+.project-name{
+  color: white;
+  font-size: 20px;
+  margin:10px
+}
+.compare-btn{
+  margin:10px;
+}
+.select-boxes{
+  height: 33px;
+  font-size: 13px;
+}
+.report-imput-elem-spacing{
+  margin:10px
+}
+@media (min-width:1281px){ 
+  .report-inputs-wrapper{
+    margin-right:8%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* width: 15%; */
+  }  
+  /* .report-inputs-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top:10px;
+  }   */
+  
+}
+
+/* tablet, landscape iPad, lo-res laptops ands desktops for all below 1129px screen sizes */
+@media (min-width:736px) and (max-width:1281px)  { 
+  .report-inputs-viewer{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 10px;
+  }
+  .report-inputs-viewer select{
+    background: white;
+   }
+}
+
+@media (max-width:736px)  { 
+  .report-inputs-viewer select{
+   background: white;
+  }
+}
+
+
+
+
+
+
+
+
+
+

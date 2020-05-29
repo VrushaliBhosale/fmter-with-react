@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import ReportViewer from 'react-lighthouse-viewer';
-import {getAllRunIds, getLastReport, getAllProjects} from '../../services/api-methods';
+import {getLastReport, getAllProjects} from '../../services/api-methods';
 import './style.css';
 import { Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import Moment from 'react-moment';
+const moment = require('moment');
+
 var Loader = require('react-loader');
 
 const ShowReports = () => {
@@ -16,42 +20,27 @@ const ShowReports = () => {
   const [reportlLoader,setReportLoader] = useState(true);
   const [loader,setLoader] = useState(true);
 
-  const resloveRunPromies = async() =>{
-    let data = await getAUdits();
-    return data;
-  }
-  async function getAUdits(){
-   return  await getAllRunIds()
-    .then(async runs=>{
-      return runs;
-    })
-    .catch(function(error){
-      console.log("Error :",error);
-    });
-  }
-  const resloveProjectPromies = async() =>{
-    let data = await getProjects();
-    console.log("data :",data)
-    return data;
-  }
-  async function getProjects(){
-   return  await getAllProjects()
-    .then(async projects=>{
-      console.log("in func :",projects)
-      return projects;
-    })
-    .catch(function(error){
-      console.log("Error :",error);
-    });
-  }
   useEffect(()=>{
     setLoader(false);
     let isSubscribed = true;
+    const resloveProjectPromies = async() =>{
+      let data = await getProjects();
+      console.log("data :",data)
+      return data;
+    }
+    async function getProjects(){
+     return  await getAllProjects()
+      .then(async projects=>{
+        return projects;
+      })
+      .catch(function(error){
+        console.log("Error :",error);
+      });
+    }
     if (isSubscribed) {
       resloveProjectPromies().then(projects=>{
         if(projects.length>0){
         let lastproject = projects[projects.length-1];
-        console.log(lastproject.name)
         setAllProjects(projects)
         setActiveProject(projects.length-1)
         setAllRuns(lastproject.runs);
@@ -113,7 +102,13 @@ const ShowReports = () => {
   const runList = 
   allRuns&&allRuns.map((run,index)=>{
     return (
-    <option value={index} key={index}>{run.created_date}</option>
+    <option value={index} key={index}>
+      {moment(run.created_date).format('DD/MMM/YYYY,h:mm:ss a')}
+      {/* {run.created_date} */}
+      {/* <Moment titleFormat="D MMM YYYY" withTitle>
+        {run.created_date}
+      </Moment> */}
+    </option> 
     )
   })
 
@@ -126,17 +121,19 @@ const ShowReports = () => {
   return (
     <div>  
     <Loader loaded={loader}>
-    { (!allProjects.length && !allRuns.length || !allScores.length)&&<h3>Runs and scores are empty</h3> }
+    { (!allProjects.length || !allRuns.length || !allScores.length)&&<h3>Runs and scores are empty</h3> }
     {
+      
       allRuns.length>0 && allScores.length>0 && allProjects.length>0 && 
       <div style={{backgroundColor:'#000000'}}>
         <div className="name-input-wrapper">
-          <div className="project-name">{activeProject && allProjects[activeProject].name}</div>
-          <div className="report-inputs-viewer">
+          <div className="project-name">{allProjects[activeProject].name}</div>
+          <div className="report-inputs-wrapper">
             <div className="report-imput-elem-spacing">
               <select 
                 value={activeProject}
                 onChange={handleProjectSelect} 
+                className="select-boxes"
                 > 
                 {projectList}
               </select>
@@ -145,6 +142,7 @@ const ShowReports = () => {
               <select 
                 value={initialRun}
                 onChange={handleRunSelect} 
+                className="select-boxes"
                 > 
                 {runList}
               </select>
@@ -153,22 +151,31 @@ const ShowReports = () => {
               <select 
                 value={selectedIndex}
                 onChange={handleScoreSelect}
-                style={{ textOverflow: "ellipsis",overflow: "hidden"}}
+                className="select-boxes"s
                 > 
                 {scoreList}
               </select>
             </div>
-            <Link to={{
+            <Link style={{textDecoration:'none'}} to={{
                 pathname:"/compare",
                 state:{
                   runs:{allRuns}
                 }
               }}>
-              <button className="compair-btn">Compair reports</button>
+                <Button variant="contained" color="primary" className="compare-btn" className="report-imput-elem-spacing">
+                  Compare Reports 
+                </Button>
+              {/* <button className="compair-btn">Compair reports</button> */}
             </Link>
           </div>
         </div>
            <Loader loaded={reportlLoader}>
+           {/* {useMemo(
+              () => (
+                <ReportViewer json={report} key={getUniqueKey()}/>
+              ),
+              [report]
+            )} */}
             {report && <ReportViewer json={report} key={getUniqueKey()}/> }
           </Loader>
          

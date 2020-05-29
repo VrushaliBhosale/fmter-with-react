@@ -2,6 +2,8 @@ import React, { useEffect,useState } from 'react';
 import ShowCommon from '../comparisonDisplay';
 import { getLastReport,getRunById } from '../../services/api-methods';
 import { Link, useLocation, useParams} from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+const moment = require('moment');
 
 const CompairReports = (props) => {
   const [runs,setRuns] = useState([]);
@@ -13,24 +15,24 @@ const CompairReports = (props) => {
   const [msg,setMsg] = useState('Select your timestamps to show the reports');
   let { run1,run2 } = useParams();
   let location=useLocation();
- 
-  const resolvePromise = async() => {
-    let results = await getScoresFromUrlId();
-    return results;
-  }
-  const getScoresFromUrlId = async() => {
-    let run1Data = await getRunById(run1);
-    let run2Data = await getRunById(run2);
-    if(run1Data&&run2Data){
-      return {run1Data,run2Data};
-    }
-    else{
-      setMsg("set valid timeStamps");
-      return;
-    }
-  }
 
   useEffect(()=>{
+    const resolvePromise = async() => {
+      let results = await getScoresFromUrlId();
+      return results;
+    }
+    const getScoresFromUrlId = async() => {
+      let run1Data = await getRunById(run1);
+      let run2Data = await getRunById(run2);
+      if(run1Data&&run2Data){
+        return {run1Data,run2Data};
+      }
+      else{
+        setMsg("set valid timeStamps");
+        return;
+      }
+    }
+    
     if(run1 && run2){
       if(run1!==run2){  
       resolvePromise().then(res=>{
@@ -68,7 +70,9 @@ const CompairReports = (props) => {
   },[])
 
 const runList = runs && runs.map((run,index)=>{
-  return <option key={index} value={run._id}>{run.created_date}</option>
+  return <option key={index} value={run._id}>
+    {moment(run.created_date).format('DD/MMM/YYYY,h:mm:ss a')}
+  </option>
 })
 
 const checkRuns = () => {
@@ -173,30 +177,39 @@ function getCalculatedAudits(remaining) {
 
   return (
     <div style={{marginLeft:'30px',backgroundColor:'#00000'}}>
-      <Link to='/'>
-      <button>Back to Home</button>
+      <Link to='/' style={{textDecoration:'none'}}>
+      <Button variant="contained" color="primary" style={{marginTop:'10px'}}>
+        Back To Home
+      </Button>
       </Link>
       <div>
       {runs.length>0 && <div>
         <select 
           onChange={(event)=>setRunId1(event.target.value)} 
           value={runId1}
-          style={{marginTop:'20px'}}> 
+          style={{marginTop:'20px'}}
+          className="select-boxes"
+          > 
          <option>Select one</option>
           {runList}
         </select>
         <select   
           onChange={(event)=>setRunId2(event.target.value)} 
           value={runId2}
-          style={{ marginLeft:'10px',marginTop:'20px'}}> 
+          style={{ marginLeft:'10px',marginTop:'20px'}}
+          className="select-boxes"
+          > 
          <option>Select one</option>
           {runList}
         </select>
-        <Link to={{
+        <Link style={{textDecoration:'none'}} to={{
            pathname:`/compare/${runId1}/${runId2}`,
            state:{runs:runs}
         }}>
-          <button style={{ padding:'5px',marginLeft:'30px'}}>Submit</button>
+           <Button variant="contained" color="primary" style={{padding:'5px',marginLeft:'30px'}}>
+            Submit
+          </Button>
+          {/* <button style={{padding:'5px',marginLeft:'30px' }}>Submit</button> */}
           </Link>
       </div>
       }
@@ -210,6 +223,7 @@ function getCalculatedAudits(remaining) {
       } 
       
     </div>
+
   </div>
   )
 
